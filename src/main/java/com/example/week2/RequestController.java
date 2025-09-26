@@ -25,6 +25,6 @@ public class RequestController {
 
     @GetMapping ("/person")
     public Person getperson() {
-        return new Person("David", "22");
+        return new Person("David", 22);
     }
 }
