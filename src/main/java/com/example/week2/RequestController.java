@@ -6,58 +6,55 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 public class RequestController {
 
+    // Simple endpoint that returns "Hello World"
     @GetMapping("/hello")
-    public String hello()
-    {
+    public String hello() {
         return "Hello World";
     }
 
+    // Endpoint that greets a user by their name
+    // Example: /greet/John -> "Hello John!"
     @GetMapping("/greet/{name}")
-    public String greetByName(@PathVariable String name)
-    {
+    public String greetByName(@PathVariable String name) {
         return "Hello " + name + "!";
     }
 
+    // Endpoint that shows name and age details
+    // Example: /details?name=John&age=25
     @GetMapping("/details")
-    public String details(@RequestParam String name,@RequestParam int age) {
-        return "Name : " + name + " Age : " + age;
+    public String details(@RequestParam String name, @RequestParam int age) {
+        return "Name: " + name + " Age: " + age;
     }
 
-    @GetMapping ("/person")
-    public Person getperson() {
+    // Endpoint that returns a Person object
+    @GetMapping("/person")
+    public Person getPerson() {
         return new Person("David", 22);
     }
 
+    // CalculatorAdd that performs add, subtract, multiply, or divide
     @GetMapping("/calculate")
-    public Map<String, Object> calculate(
+    public CalculatorResult calculate(
             @RequestParam double num1,
             @RequestParam double num2,
             @RequestParam String operation) {
 
-        double total = 0;
-        String op = operation.toLowerCase();
-
-        switch (op) {
+        switch (operation.toLowerCase()) {
             case "add":
-                total = num1 + num2;
-                break;
+                return new CalculatorResult("add", num1 + num2);
             case "subtract":
-                total = num1 - num2;
-                break;
+                return new CalculatorResult("subtract", num1 - num2);
             case "multiply":
-                total = num1 * num2;
-                break;
+                return new CalculatorResult("multiply", num1 * num2);
             case "divide":
                 if (num2 == 0) {
-                    return Map.of("operation", "divide", "warning", "Cannot divide by zero");
+                    // return warning if dividing by zero
+                    return new CalculatorResult("divide", "Cannot divide by zero");
                 }
-                total = num1 / num2;
-                break;
+                return new CalculatorResult("divide", num1 / num2);
             default:
-                return Map.of("error", "Invalid operation");
+                // return warning if invalid operation
+                return new CalculatorResult("invalid", "Unknown operation");
         }
-
-        return Map.of("operation", op, "total", total);
     }
-
 }
